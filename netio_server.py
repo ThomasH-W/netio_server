@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # server for netio server
-# 2013-12-20 V1.9 by Thomas Hoeser
+# 2013-12-20 V1.9b by Thomas Hoeser
 
 # ChangeLog V1.9
 # fixed error for gpio command - thanks to micmuec
