@@ -1,8 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # server for netio server
-# 2013-12-20 V1.9b by Thomas Hoeser
+# 2014-02-22 V2.09 by Thomas Hoeser
 
+# ChangeLog V2.0
+# fixed error for gpio command and added exception
+#
 # ChangeLog V1.9
 # fixed error for gpio command - thanks to micmuec
 # gpio added - provided by Bart / Tobi 
@@ -126,15 +129,21 @@ def srvcmd_gpio(server_cmd,client_words,client_args):
 			GPIO = client_words[2]
 			LEDValue = client_words[3]
 			file = "/sys/class/gpio/"+GPIO+"/value"
-			f = open(file, 'w')
-			f.write(LEDValue)
-			f.close
-			server_reply = "Written " + LEDValue + " to " + GPIO
+ 	 		try:
+						f = open(file, 'w')
+						f.write(LEDValue)
+						f.close
+						server_reply = "Written " + LEDValue + " to " + GPIO
+			except:
+ 	 				server_reply = "Port "+ GPIO + " does not exist: check with cat " +file	 												 	 							
 		elif client_words[1] == "check":
 			GPIO = client_words[2]
 			file = "/sys/class/gpio/"+GPIO+"/value"
-			f = open(file, 'r')
-			server_reply = f.read()
+			try:
+					f = open(file, 'r')
+					server_reply = f.read()
+			except:
+ 	 				server_reply = "Port "+ GPIO + " does not exist: check with cat " +file	 
 		else:
 			server_reply = "wrong command"
 
@@ -908,7 +917,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 				# 	Item		Button
 				# 	onSend  gpio set gpio7 1
 				if ( "gpio" == client_cmd):
-					server_reply = srvcmd_led(server_cmd,client_words,client_args)
+					server_reply = srvcmd_gpio(server_cmd,client_words,client_args)
 
 			# send feedback to client
 			if verbose_level >1: print "server reply: " , server_reply
