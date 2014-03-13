@@ -1,8 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 # server for netio server
-# 2014-02-22 V2.09 by Thomas Hoeser
+# 2014-03-13 V2.1 by Thomas Hoeser
 
+# ChangeLog V2.1
+# added "\n" for NetIO 2.0 (should also work for prior versions)
+#
 # ChangeLog V2.0
 # fixed error for gpio command and added exception
 #
@@ -919,6 +922,8 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 				if ( "gpio" == client_cmd):
 					server_reply = srvcmd_gpio(server_cmd,client_words,client_args)
 
+			# added "\n" for NetIO 2.0
+			server_reply = server_reply + "\n"
 			# send feedback to client
 			if verbose_level >1: print "server reply: " , server_reply
 			log_buffer.append(server_reply)
